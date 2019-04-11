@@ -10,7 +10,6 @@ This is a logstash plugin for pulling data out of mongodb and processing with lo
 
 This was designed for parsing logs that were written into mongodb. This means that it may not re-parse db entries that were changed and already parsed.
 
-
 ### Installation
 
 + Logstash installed from ZIP | TGZ
@@ -24,27 +23,32 @@ This was designed for parsing logs that were written into mongodb. This means th
   + bin/plugin install /path/to/logstash-input-mongodb-0.3.0.gem
   + bin/plugin install --development
 
+### Compatibility
+
+  Logstash 2.x - plugin version 0.3.3
+  Logstash 5.x - plugin version 0.4.x and higher
+  Logstash 6.x - plugin version 0.6.x and higher
+
 ### Configuration Options
 
-```
-Name                 Type          Description
-uri                  [String]      A MongoDB URI for your database or cluster (check the MongoDB documentation for further info on this) [No Default, Required]
-placeholder_db_dir   [String]      Path where the place holder database will be stored locally to disk [No Default, Required]
-  This gets created by the plugin so the directory needs to be writeable by the user that logstash is running as
-placeholder_db_name  [String]      Name of the database file that will be created [Default: logstash_sqlite.db]
-collection           [String]      A regex that will be used to find desired collecitons. [No Default, Required]
-generateId           [Boolean]     If true, this will add a field '_id' that contains the MongoDB Document id
-batch_size           [Int]         Size of the batch of mongo documents to pull at a time [Default: 30]
-parse_method         [String]      Built in parsing of the mongodb document object [Default: 'flatten']
-dig_fields           [Array]       An array of fields that should employ the dig method
-dig_dig_fields       [Array]       This provides a second level of hash flattening after the initial dig has been done
-```
-
+| Name                | Type      | Description                                                                                                                  |
+| :------------------ | :-------- | :--------------------------------------------------------------------------------------------------------------------------- |
+| uri                 | [String]  | A MongoDB URI for your database or cluster (check the MongoDB documentation for further info on this) [No Default, Required] |
+| placeholder_db_dir  | [String]  | Path where the place holder database will be stored locally to disk [No Default, Required]                                   |
+|                     |           | This gets created by the plugin so the directory needs to be writeable by the user that logstash is running as               |
+| placeholder_db_name | [String]  | Name of the database file that will be created [Default: logstash_sqlite.db]                                                 |
+| collection          | [String]  | A regex that will be used to find desired collecitons. [No Default, Required]                                                |
+| generateId          | [Boolean] | If true, this will add a field '_id' that contains the MongoDB Document id                                                   |
+| batch_size          | [Int]     | Size of the batch of mongo documents to pull at a time [Default: 30]                                                         |
+| parse_method        | [String]  | Built in parsing of the mongodb document object [Default: 'flatten'] [Options: "simple", "dig", "flatten"]                   |
+| dig_fields          | [Array]   | An array of fields that should employ the dig method                                                                         |
+| dig_dig_fields      | [Array]   | This provides a second level of hash flattening after the initial dig has been done                                          |
 
 ### Configuration
 
 Example
-```
+
+```conf
 input {
   mongodb {
     uri => 'mongodb://10.0.0.30/my-logs?ssl=true'

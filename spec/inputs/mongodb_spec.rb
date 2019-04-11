@@ -10,7 +10,18 @@ include Mongo
 FILE_DELIMITER = LogStash::Environment.windows? ? "\r\n" : "\n"
 
 describe LogStash::Inputs::MongoDB do
-  before(:all) do
+  collection = 'test_events'
+  mongo_uri = 'mongodb://localhost/logstash-input-mongodb_test'
+  sqlite_db_file = Stud::Temporary.file
+  placeholder_db_dir = File.dirname sqlite_db_file
+  let(:settings) { {} }
+  let(:plugin) { LogStash::Inputs::MongoDB.new(settings) }
+  let(:queue) { Queue.new }
+  let (:db) do
+    Mongo::Client.new(mongo_uri).database
+  end
+
+  before :each do
     @abort_on_exception = Thread.abort_on_exception
     Thread.abort_on_exception = true
   end
