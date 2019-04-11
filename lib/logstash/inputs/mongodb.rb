@@ -80,7 +80,7 @@ class LogStash::Inputs::MongoDB < LogStash::Inputs::Base
     begin
       sqlitedb.create_table "#{SINCE_TABLE}" do
         String :table
-        Int :place
+        String :place
       end
     rescue
       @logger.debug("since table already exists")
@@ -354,6 +354,8 @@ class LogStash::Inputs::MongoDB < LogStash::Inputs::Base
                     event.set(k, v.to_s)
                   end
               end
+            elsif @parse_method == 'json'
+              event.set('data', doc.to_json)
             end
 
             queue << event
